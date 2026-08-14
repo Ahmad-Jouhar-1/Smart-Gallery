@@ -1,0 +1,83 @@
+import 'package:flutter/material.dart';
+import 'package:smart_gallery/app/similar_albums/models/similar_album_model.dart';
+import 'package:smart_gallery/core/constants/app_colors.dart';
+import 'package:smart_gallery/core/constants/app_dimensions.dart';
+
+class SimilarAlbumWidget extends StatelessWidget {
+  const SimilarAlbumWidget({
+    super.key,
+    required this.album,
+    required this.onTap,
+  });
+
+  final SimilarAlbumModel album;
+  final VoidCallback onTap;
+
+  @override
+  Widget build(BuildContext context) {
+    return GestureDetector(
+      onTap: onTap,
+      child: Column(
+        crossAxisAlignment: CrossAxisAlignment.start,
+        spacing: AppDimensions.sp,
+        children: [
+          _AlbumImage(image: album.image),
+
+          _AlbumInfo(name: album.name, count: album.count),
+        ],
+      ),
+    );
+  }
+}
+
+class _AlbumImage extends StatelessWidget {
+  const _AlbumImage({required this.image});
+
+  final String image;
+
+  @override
+  Widget build(BuildContext context) {
+    return Expanded(
+      child: ClipRRect(
+        borderRadius: BorderRadius.circular(AppDimensions.sbr),
+        child: SizedBox.expand(child: Image.asset(image, fit: BoxFit.cover)),
+      ),
+    );
+  }
+}
+
+class _AlbumInfo extends StatelessWidget {
+  const _AlbumInfo({required this.name, required this.count});
+
+  final String name;
+  final int count;
+
+  @override
+  Widget build(BuildContext context) {
+    return Column(
+      crossAxisAlignment: CrossAxisAlignment.start,
+      children: [
+        Text(
+          name,
+          maxLines: 1,
+          overflow: TextOverflow.ellipsis,
+          style: TextStyle(
+            color: AppColors.primaryTextColor,
+            fontSize: AppDimensions.sfs,
+            fontWeight: FontWeight.bold,
+          ),
+        ),
+
+        Text(
+          '$count photo',
+          maxLines: 1,
+          style: TextStyle(
+            color: AppColors.accentTextColor,
+            fontSize: AppDimensions.sfs,
+            fontWeight: FontWeight.w400,
+          ),
+        ),
+      ],
+    );
+  }
+}
