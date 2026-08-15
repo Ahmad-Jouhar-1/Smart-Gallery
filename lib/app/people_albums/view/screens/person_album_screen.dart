@@ -1,9 +1,11 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
-import 'package:smart_gallery/app/people_albums/controllers/fetch_person_albums/fetch_person_albums_bloc.dart';
-import 'package:smart_gallery/app/people_albums/view/widgets/person_albums_failed_widget.dart';
-import 'package:smart_gallery/app/people_albums/view/widgets/person_albums_loaded_empty_widget.dart';
-import 'package:smart_gallery/app/people_albums/view/widgets/person_albums_loaded_widget.dart';
+import 'package:get/get.dart';
+import 'package:smart_gallery/app/people_albums/controllers/fetch_person_photos/fetch_person_photos_bloc.dart';
+import 'package:smart_gallery/app/people_albums/models/person_album_model.dart';
+import 'package:smart_gallery/app/people_albums/view/widgets/person_photos_failed_widget.dart';
+import 'package:smart_gallery/app/people_albums/view/widgets/person_photos_loaded_empty_widget.dart';
+import 'package:smart_gallery/app/people_albums/view/widgets/person_photos_loaded_widget.dart';
 import 'package:smart_gallery/core/constants/app_colors.dart';
 import 'package:smart_gallery/core/controllers/selection/selection_bloc.dart';
 import 'package:smart_gallery/core/services/media_share_service.dart';
@@ -12,11 +14,15 @@ import 'package:smart_gallery/core/widgets/loading_widget.dart';
 import 'package:smart_gallery/core/widgets/share_bar_widget.dart';
 import 'package:smart_gallery/core/widgets/share_options_sheet_widget.dart';
 
-class PeopleAlbumsScreen extends StatelessWidget {
-  const PeopleAlbumsScreen({super.key});
+class PersonAlbumScreen extends StatelessWidget {
+  const PersonAlbumScreen({super.key, required this.person});
+
+  final PersonAlbumModel person;
 
   Future<void> _onRefresh(BuildContext context) async {
-    context.read<FetchPersonAlbumsBloc>().add(FetchPersonAlbums());
+    context.read<FetchPersonPhotosBloc>().add(
+      FetchPersonPhotos(personId: person.id),
+    );
   }
 
   @override
@@ -24,17 +30,18 @@ class PeopleAlbumsScreen extends StatelessWidget {
     return MultiBlocProvider(
       providers: [
         BlocProvider(
-          create: (context) => FetchPersonAlbumsBloc()..add(FetchPersonAlbums()),
+          create: (context) => FetchPersonPhotosBloc()
+            ..add(FetchPersonPhotos(personId: person.id)),
         ),
         BlocProvider(create: (context) => SelectionBloc()),
       ],
       child: Scaffold(
         backgroundColor: AppColors.primaryBackgroundColor,
         appBar: AppBarWidget(
-          title: "AI Gallery",
-          subtitle: "People",
-          icon: Icons.filter_alt_outlined,
-          onTap: () {},
+          title: person.name,
+          subtitle: "${person.count} Photo",
+          icon: Icons.arrow_forward_ios_rounded,
+          onTap: Get.back,
         ),
         body: Builder(
           builder: (context) {
@@ -42,16 +49,20 @@ class PeopleAlbumsScreen extends StatelessWidget {
               onRefresh: () => _onRefresh(context),
               color: AppColors.primaryColor,
               backgroundColor: AppColors.accentBackgroundColor,
-              child: BlocBuilder<FetchPersonAlbumsBloc, FetchPersonAlbumsState>(
+              child: BlocBuilder<FetchPersonPhotosBloc, FetchPersonPhotosState>(
                 builder: (context, state) {
                   switch (state) {
-                    case FetchPersonAlbumsLoading():
+                    case FetchPersonPhotosLoading():
                       return LoadingWidget();
-                    case FetchPersonAlbumsLoaded():
+                    case FetchPersonPhotosLoaded():
                       return BlocBuilder<SelectionBloc, SelectionState>(
                         builder: (context, selectionState) {
-                          return PersonAlbumsLoadedWidget(
-                            personAlbums: state.personAlbums,
+                          return PersonPhotosLoadedWidget(
+                            personPhotos: state.personPhotos,
+                            selectedFilter: state.filter,
+                            onFilterSelected: (filter) => context
+                                .read<FetchPersonPhotosBloc>()
+                                .add(FilterPersonPhotos(filter: filter)),
                             isSelecting: selectionState.isSelecting,
                             selectedIds: selectionState.selectedIds,
                             onStartSelecting: (id) => context
@@ -63,15 +74,18 @@ class PeopleAlbumsScreen extends StatelessWidget {
                           );
                         },
                       );
-                    case FetchPersonAlbumsLoadedEmpty():
-                      return PersonAlbumsLoadedEmptyWidget(
+                    case FetchPersonPhotosLoadedEmpty():
+                      return PersonPhotosLoadedEmptyWidget(
                         image: "assets/images/similar_empty.png",
-                        title: "No People Found",
-                        subtitle:
-                            "Capture new moments or upload your favourite images.",
+                        title: state.hasAnyPhoto
+                            ? "No Results"
+                            : "No Photos Found",
+                        subtitle: state.hasAnyPhoto
+                            ? "There are no photos within this time range."
+                            : "Capture new moments or upload your favourite images.",
                       );
-                    case FetchPersonAlbumsFailed():
-                      return PersonAlbumsFailedWidget(
+                    case FetchPersonPhotosFailed():
+                      return PersonPhotosFailedWidget(
                         image: "assets/images/similar_empty.png",
                         title: "Something Went Wrong",
                         subtitle:
@@ -102,18 +116,18 @@ class PeopleAlbumsScreen extends StatelessWidget {
   }
 
   void _share(BuildContext context, Set<int> selectedIds) {
-    final state = context.read<FetchPersonAlbumsBloc>().state;
-    if (state is! FetchPersonAlbumsLoaded) return;
+    final state = context.read<FetchPersonPhotosBloc>().state;
+    if (state is! FetchPersonPhotosLoaded) return;
 
-    final selectedPersons = state.personAlbums
-        .where((person) => selectedIds.contains(person.id))
+    final selectedPhotos = state.personPhotos
+        .where((photo) => selectedIds.contains(photo.id))
         .toList();
 
     ShareOptionsSheetWidget.show(
       context,
       onPicked: () => MediaShareService.shareImages(
-        selectedPersons.map((person) => person.image).toList(),
-        text: selectedPersons.map((person) => person.name).join(', '),
+        selectedPhotos.map((photo) => photo.image).toList(),
+        text: "${person.name}'s photos",
       ),
     );
   }

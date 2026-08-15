@@ -8,3 +8,9 @@ class FetchSimilarAlbumPhotos extends FetchSimilarAlbumPhotosEvent {
 
   FetchSimilarAlbumPhotos({required this.similarAlbumId});
 }
+
+class DeleteSimilarAlbumPhotos extends FetchSimilarAlbumPhotosEvent {
+  final Set<int> ids;
+
+  DeleteSimilarAlbumPhotos({required this.ids});
+}

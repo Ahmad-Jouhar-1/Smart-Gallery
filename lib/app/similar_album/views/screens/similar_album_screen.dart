@@ -2,10 +2,12 @@ import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:get/get.dart';
 import 'package:smart_gallery/app/similar_album/controllers/bloc/fetch_similar_album_photos_bloc.dart';
+import 'package:smart_gallery/app/similar_album/views/widgets/similar_album_delete_bar_widget.dart';
 import 'package:smart_gallery/app/similar_album/views/widgets/similar_album_photos_failed_widget.dart';
 import 'package:smart_gallery/app/similar_album/views/widgets/similar_album_photos_loaded_widget.dart';
 import 'package:smart_gallery/app/similar_albums/models/similar_album_model.dart';
 import 'package:smart_gallery/core/constants/app_colors.dart';
+import 'package:smart_gallery/core/controllers/selection/selection_bloc.dart';
 import 'package:smart_gallery/core/widgets/app_bar_widget.dart';
 import 'package:smart_gallery/core/widgets/loading_widget.dart';
 
@@ -31,6 +33,7 @@ class SimilarAlbumScreen extends StatelessWidget {
                     FetchSimilarAlbumPhotos(similarAlbumId: similarAlbum.id),
                   ),
         ),
+        BlocProvider(create: (context) => SelectionBloc()),
       ],
       child: Scaffold(
         backgroundColor: AppColors.primaryBackgroundColor,
@@ -55,9 +58,33 @@ class SimilarAlbumScreen extends StatelessWidget {
                     case FetchSimilarAlbumPhotosLoading():
                       return LoadingWidget();
                     case FetchSimilarAlbumPhotosLoaded():
-                      return SimilarAlbumPhotosLoadedWidget(
-                        similarAlbumBestPhoto: state.similarAlbumBestPhoto,
-                        similarAlbumPhotos: state.similarAlbumPhotos,
+                      return BlocBuilder<SelectionBloc, SelectionState>(
+                        builder: (context, selectionState) {
+                          return SimilarAlbumPhotosLoadedWidget(
+                            similarAlbumBestPhoto: state.similarAlbumBestPhoto,
+                            similarAlbumPhotos: state.similarAlbumPhotos,
+                            isSelecting: selectionState.isSelecting,
+                            selectedIds: selectionState.selectedIds,
+                            onStartSelecting: (id) => context
+                                .read<SelectionBloc>()
+                                .add(StartSelecting(id: id)),
+                            onToggleSelected: (id) => context
+                                .read<SelectionBloc>()
+                                .add(ToggleSelected(id: id)),
+                            onDeleteAll: () => context.read<SelectionBloc>().add(
+                              SelectMany(
+                                ids: state.similarAlbumPhotos
+                                    .where(
+                                      (photo) =>
+                                          photo.id !=
+                                          state.similarAlbumBestPhoto.id,
+                                    )
+                                    .map((photo) => photo.id)
+                                    .toSet(),
+                              ),
+                            ),
+                          );
+                        },
                       );
                     case FetchSimilarAlbumPhotosFailed():
                       return SimilarAlbumPhotosFailedWidget(
@@ -72,6 +99,22 @@ class SimilarAlbumScreen extends StatelessWidget {
                   }
                 },
               ),
+            );
+          },
+        ),
+        bottomNavigationBar: BlocBuilder<SelectionBloc, SelectionState>(
+          builder: (context, selectionState) {
+            if (!selectionState.isSelecting) return const SizedBox.shrink();
+
+            return SimilarAlbumDeleteBarWidget(
+              selectedCount: selectionState.selectedIds.length,
+              onCancel: () => context.read<SelectionBloc>().add(ClearSelection()),
+              onDelete: () {
+                context.read<FetchSimilarAlbumPhotosBloc>().add(
+                  DeleteSimilarAlbumPhotos(ids: selectionState.selectedIds),
+                );
+                context.read<SelectionBloc>().add(ClearSelection());
+              },
             );
           },
         ),

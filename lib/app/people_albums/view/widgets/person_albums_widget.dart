@@ -1,21 +1,21 @@
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
-import 'package:smart_gallery/app/Image_evaluation/views/screens/image_evaluation_screen.dart';
-import 'package:smart_gallery/app/similar_album/models/similar_album_photo_model.dart';
-import 'package:smart_gallery/app/similar_album/views/widgets/similar_album_photo_widget.dart';
+import 'package:smart_gallery/app/people_albums/models/person_album_model.dart';
+import 'package:smart_gallery/app/people_albums/view/screens/person_album_screen.dart';
+import 'package:smart_gallery/app/people_albums/view/widgets/person_album_widget.dart';
 import 'package:smart_gallery/core/constants/app_dimensions.dart';
 
-class SimilarAlbumPhotosWidget extends StatelessWidget {
-  const SimilarAlbumPhotosWidget({
+class PersonAlbumsWidget extends StatelessWidget {
+  const PersonAlbumsWidget({
     super.key,
-    required this.similarAlbumPhotos,
+    required this.personAlbums,
     required this.isSelecting,
     required this.selectedIds,
     required this.onStartSelecting,
     required this.onToggleSelected,
   });
 
-  final List<SimilarAlbumPhotoModel> similarAlbumPhotos;
+  final List<PersonAlbumModel> personAlbums;
   final bool isSelecting;
   final Set<int> selectedIds;
   final ValueChanged<int> onStartSelecting;
@@ -27,30 +27,30 @@ class SimilarAlbumPhotosWidget extends StatelessWidget {
       padding: EdgeInsets.symmetric(horizontal: AppDimensions.mp),
       shrinkWrap: true,
       physics: const NeverScrollableScrollPhysics(),
-      itemCount: similarAlbumPhotos.length,
+      itemCount: personAlbums.length,
       gridDelegate: SliverGridDelegateWithFixedCrossAxisCount(
         crossAxisCount: 2,
         crossAxisSpacing: AppDimensions.sp,
-        mainAxisSpacing: AppDimensions.sp,
-        childAspectRatio: 1,
+        mainAxisSpacing: AppDimensions.mp,
+        childAspectRatio: 0.8,
       ),
       itemBuilder: (context, index) {
-        final photo = similarAlbumPhotos[index];
-        final isSelected = selectedIds.contains(photo.id);
+        final person = personAlbums[index];
+        final isSelected = selectedIds.contains(person.id);
 
-        return SimilarAlbumPhotoWidget(
-          similarAlbumPhoto: photo,
+        return PersonAlbumWidget(
+          person: person,
           isSelecting: isSelecting,
           isSelected: isSelected,
-          onLongPress: () => onStartSelecting(photo.id),
+          onLongPress: () => onStartSelecting(person.id),
           onTap: () {
             if (isSelecting) {
-              onToggleSelected(photo.id);
+              onToggleSelected(person.id);
               return;
             }
 
             Get.to(
-              () => ImageEvaluationScreen(similarAlbumPhoto: photo),
+              () => PersonAlbumScreen(person: person),
               transition: Transition.circularReveal,
             );
           },

@@ -16,25 +16,23 @@ class FetchSimilarAlbumPhotosBloc
       try {
         await Future.delayed(Duration(seconds: 5));
 
-        SimilarAlbumPhotoModel mySimilarAlbumBestPhoto =
-            SimilarAlbumPhotoModel.fromJson(
-              similarAlbumsPhotos[event.similarAlbumId]?["best_photo"]
-                  as Map<String, dynamic>,
-            );
+        _bestPhoto = SimilarAlbumPhotoModel.fromJson(
+          similarAlbumsPhotos[event.similarAlbumId]?["best_photo"]
+              as Map<String, dynamic>,
+        );
 
-        List<SimilarAlbumPhotoModel> mySimilarAlbumPhotos =
-            (similarAlbumsPhotos[event.similarAlbumId]?["all_photos"]
-                    as List<dynamic>)
-                .map(
-                  (similarAlbumPhoto) =>
-                      SimilarAlbumPhotoModel.fromJson(similarAlbumPhoto),
-                )
-                .toList();
+        _photos = (similarAlbumsPhotos[event.similarAlbumId]?["all_photos"]
+                as List<dynamic>)
+            .map(
+              (similarAlbumPhoto) =>
+                  SimilarAlbumPhotoModel.fromJson(similarAlbumPhoto),
+            )
+            .toList();
 
         emit(
           FetchSimilarAlbumPhotosLoaded(
-            similarAlbumBestPhoto: mySimilarAlbumBestPhoto,
-            similarAlbumPhotos: mySimilarAlbumPhotos,
+            similarAlbumBestPhoto: _bestPhoto,
+            similarAlbumPhotos: _photos,
           ),
         );
       } on ServerException catch (e) {
@@ -45,5 +43,21 @@ class FetchSimilarAlbumPhotosBloc
         );
       }
     });
+
+    on<DeleteSimilarAlbumPhotos>((event, emit) {
+      _photos = _photos
+          .where((photo) => !event.ids.contains(photo.id))
+          .toList();
+
+      emit(
+        FetchSimilarAlbumPhotosLoaded(
+          similarAlbumBestPhoto: _bestPhoto,
+          similarAlbumPhotos: _photos,
+        ),
+      );
+    });
   }
+
+  late SimilarAlbumPhotoModel _bestPhoto;
+  List<SimilarAlbumPhotoModel> _photos = [];
 }

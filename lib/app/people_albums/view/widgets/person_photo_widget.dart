@@ -1,23 +1,26 @@
 import 'package:flutter/material.dart';
-import 'package:smart_gallery/app/similar_album/models/similar_album_photo_model.dart';
 import 'package:smart_gallery/core/constants/app_colors.dart';
 import 'package:smart_gallery/core/constants/app_dimensions.dart';
 
-class SimilarAlbumPhotoWidget extends StatelessWidget {
-  const SimilarAlbumPhotoWidget({
+class PersonPhotoWidget extends StatelessWidget {
+  const PersonPhotoWidget({
     super.key,
-    required this.similarAlbumPhoto,
+    required this.image,
+    required this.rate,
     required this.onTap,
     required this.onLongPress,
     this.isSelecting = false,
     this.isSelected = false,
+    this.isBest = false,
   });
 
-  final SimilarAlbumPhotoModel similarAlbumPhoto;
+  final String image;
+  final int rate;
   final VoidCallback onTap;
   final VoidCallback onLongPress;
   final bool isSelecting;
   final bool isSelected;
+  final bool isBest;
 
   @override
   Widget build(BuildContext context) {
@@ -38,12 +41,13 @@ class SimilarAlbumPhotoWidget extends StatelessWidget {
           children: [
             Opacity(
               opacity: isSelecting && !isSelected ? 0.55 : 1,
-              child: _Photo(image: similarAlbumPhoto.image),
+              child: _Photo(image: image),
             ),
+            if (isBest) _BestBadge(),
             if (isSelecting)
               _SelectionCheck(isSelected: isSelected)
             else
-              _Rate(rate: similarAlbumPhoto.rate),
+              _Rate(rate: rate),
           ],
         ),
       ),
@@ -86,6 +90,45 @@ class _Rate extends StatelessWidget {
             fontSize: AppDimensions.sfs,
             fontWeight: FontWeight.w500,
           ),
+        ),
+      ),
+    );
+  }
+}
+
+class _BestBadge extends StatelessWidget {
+  const _BestBadge();
+
+  @override
+  Widget build(BuildContext context) {
+    return Positioned(
+      top: AppDimensions.sp,
+      right: AppDimensions.sp,
+      child: Container(
+        height: AppDimensions.lis,
+        padding: EdgeInsets.symmetric(horizontal: AppDimensions.sp),
+        decoration: BoxDecoration(
+          color: AppColors.transparentAccentColor,
+          borderRadius: BorderRadius.circular(AppDimensions.lbr),
+        ),
+        child: Row(
+          mainAxisSize: MainAxisSize.min,
+          spacing: AppDimensions.sm / 2,
+          children: [
+            Icon(
+              Icons.star_border_rounded,
+              color: AppColors.foregroundColor,
+              size: AppDimensions.sfs,
+            ),
+            Text(
+              "Best",
+              style: TextStyle(
+                color: AppColors.foregroundColor,
+                fontSize: AppDimensions.sfs,
+                fontWeight: FontWeight.w500,
+              ),
+            ),
+          ],
         ),
       ),
     );
