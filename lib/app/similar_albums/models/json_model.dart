@@ -1,4 +1,4 @@
-var similarAlbums = [
+final albums = [
   {
     "id": 1,
     "image": "assets/images/album1/photo1.jpg",
