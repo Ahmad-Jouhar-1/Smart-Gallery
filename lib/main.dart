@@ -1,6 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:get/get_navigation/src/root/get_material_app.dart';
-import 'package:smart_gallery/app/main_navigation/view/screens/main_navigation_screen.dart';
+import 'package:smart_gallery/app/upload_consent/view/screens/upload_consent_screen.dart';
 
 void main() {
   runApp(const MyApp());
@@ -33,7 +33,7 @@ class MyApp extends StatelessWidget {
         // tested with just a hot reload.
         colorScheme: ColorScheme.fromSeed(seedColor: Colors.deepPurple),
       ),
-      home: MainNavigationScreen(),
+      home: UploadConsentScreen(),
     );
   }
 }

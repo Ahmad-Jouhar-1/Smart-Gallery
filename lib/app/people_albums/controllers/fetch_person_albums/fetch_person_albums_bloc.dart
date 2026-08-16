@@ -16,18 +16,36 @@ class FetchPersonAlbumsBloc
       try {
         await Future.delayed(Duration(seconds: 1));
 
-        List<PersonAlbumModel> myPersonAlbums = (personAlbums as List<dynamic>)
+        _allPersonAlbums = (personAlbums as List<dynamic>)
             .map((personAlbum) => PersonAlbumModel.fromJson(personAlbum))
             .toList();
 
-        if (myPersonAlbums.isEmpty) {
-          emit(FetchPersonAlbumsLoadedEmpty());
-        } else {
-          emit(FetchPersonAlbumsLoaded(personAlbums: myPersonAlbums));
-        }
+        _emitLoaded(emit);
       } on ServerException catch (e) {
         emit(FetchPersonAlbumsFailed(errorMessage: e.errorModel.errorMessage));
       }
     });
+
+    on<RenamePersonAlbum>((event, emit) {
+      _allPersonAlbums = _allPersonAlbums
+          .map(
+            (person) => person.id == event.id
+                ? person.copyWith(name: event.newName)
+                : person,
+          )
+          .toList();
+
+      _emitLoaded(emit);
+    });
+  }
+
+  List<PersonAlbumModel> _allPersonAlbums = [];
+
+  void _emitLoaded(Emitter<FetchPersonAlbumsState> emit) {
+    if (_allPersonAlbums.isEmpty) {
+      emit(FetchPersonAlbumsLoadedEmpty());
+    } else {
+      emit(FetchPersonAlbumsLoaded(personAlbums: _allPersonAlbums));
+    }
   }
 }

@@ -1,5 +1,7 @@
 import 'package:flutter/material.dart';
+import 'package:flutter_bloc/flutter_bloc.dart' hide Transition;
 import 'package:get/get.dart';
+import 'package:smart_gallery/app/people_albums/controllers/fetch_person_albums/fetch_person_albums_bloc.dart';
 import 'package:smart_gallery/app/people_albums/models/person_album_model.dart';
 import 'package:smart_gallery/app/people_albums/view/screens/person_album_screen.dart';
 import 'package:smart_gallery/app/people_albums/view/widgets/person_album_widget.dart';
@@ -43,6 +45,9 @@ class PersonAlbumsWidget extends StatelessWidget {
           isSelecting: isSelecting,
           isSelected: isSelected,
           onLongPress: () => onStartSelecting(person.id),
+          onRename: (newName) => context.read<FetchPersonAlbumsBloc>().add(
+            RenamePersonAlbum(id: person.id, newName: newName),
+          ),
           onTap: () {
             if (isSelecting) {
               onToggleSelected(person.id);

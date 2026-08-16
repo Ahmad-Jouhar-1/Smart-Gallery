@@ -1,28 +1,21 @@
-class PersonAlbumModel {
+class StudioAlbumModel {
   final int id;
   final String image;
   final String name;
   final int count;
 
-  PersonAlbumModel({
+  StudioAlbumModel({
     required this.id,
     required this.image,
     required this.name,
     required this.count,
   });
 
-  factory PersonAlbumModel.fromJson(Map<String, dynamic> jsonData) =>
-      PersonAlbumModel(
+  factory StudioAlbumModel.fromJson(Map<String, dynamic> jsonData) =>
+      StudioAlbumModel(
         id: jsonData['id'],
         image: jsonData['image'],
         name: jsonData['name'],
         count: jsonData['count'],
       );
-
-  PersonAlbumModel copyWith({String? name}) => PersonAlbumModel(
-    id: id,
-    image: image,
-    name: name ?? this.name,
-    count: count,
-  );
 }

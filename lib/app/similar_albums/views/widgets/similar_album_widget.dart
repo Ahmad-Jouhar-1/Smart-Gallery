@@ -2,16 +2,19 @@ import 'package:flutter/material.dart';
 import 'package:smart_gallery/app/similar_albums/models/similar_album_model.dart';
 import 'package:smart_gallery/core/constants/app_colors.dart';
 import 'package:smart_gallery/core/constants/app_dimensions.dart';
+import 'package:smart_gallery/core/widgets/rename_dialog.dart';
 
 class SimilarAlbumWidget extends StatelessWidget {
   const SimilarAlbumWidget({
     super.key,
     required this.album,
     required this.onTap,
+    required this.onRename,
   });
 
   final SimilarAlbumModel album;
   final VoidCallback onTap;
+  final ValueChanged<String> onRename;
 
   @override
   Widget build(BuildContext context) {
@@ -21,7 +24,21 @@ class SimilarAlbumWidget extends StatelessWidget {
         crossAxisAlignment: CrossAxisAlignment.start,
         spacing: AppDimensions.sp,
         children: [
-          _AlbumImage(image: album.image),
+          Expanded(
+            child: Stack(
+              fit: StackFit.expand,
+              children: [
+                _AlbumImage(image: album.image),
+                _EditButton(
+                  onTap: () => showRenameDialog(
+                    context,
+                    currentName: album.name,
+                    onRenamed: onRename,
+                  ),
+                ),
+              ],
+            ),
+          ),
 
           _AlbumInfo(name: album.name, count: album.count),
         ],
@@ -37,10 +54,39 @@ class _AlbumImage extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    return Expanded(
-      child: ClipRRect(
-        borderRadius: BorderRadius.circular(AppDimensions.sbr),
-        child: SizedBox.expand(child: Image.asset(image, fit: BoxFit.cover)),
+    return ClipRRect(
+      borderRadius: BorderRadius.circular(AppDimensions.sbr),
+      child: Image.asset(image, fit: BoxFit.cover),
+    );
+  }
+}
+
+class _EditButton extends StatelessWidget {
+  const _EditButton({required this.onTap});
+
+  final VoidCallback onTap;
+
+  @override
+  Widget build(BuildContext context) {
+    return Positioned(
+      top: AppDimensions.sp,
+      right: AppDimensions.sp,
+      child: GestureDetector(
+        onTap: onTap,
+        child: Container(
+          width: AppDimensions.mis,
+          height: AppDimensions.mis,
+          alignment: Alignment.center,
+          decoration: BoxDecoration(
+            shape: BoxShape.circle,
+            color: AppColors.transparentBlackColor,
+          ),
+          child: Icon(
+            Icons.edit_outlined,
+            color: AppColors.foregroundColor,
+            size: AppDimensions.sfs,
+          ),
+        ),
       ),
     );
   }

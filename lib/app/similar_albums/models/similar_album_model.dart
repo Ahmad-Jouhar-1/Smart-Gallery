@@ -19,4 +19,11 @@ class SimilarAlbumModel {
       count: jsonData['count'],
     );
   }
+
+  SimilarAlbumModel copyWith({String? name}) => SimilarAlbumModel(
+    id: id,
+    image: image,
+    name: name ?? this.name,
+    count: count,
+  );
 }

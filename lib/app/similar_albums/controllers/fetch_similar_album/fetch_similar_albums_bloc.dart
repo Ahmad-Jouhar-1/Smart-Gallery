@@ -16,19 +16,36 @@ class FetchSimilarAlbumsBloc
       try {
         await Future.delayed(Duration(seconds: 5));
 
-        List<SimilarAlbumModel> mySimilarAlbums =
-            (similarAlbums as List<dynamic>)
-                .map((similarAlbum) => SimilarAlbumModel.fromJson(similarAlbum))
-                .toList();
+        _allSimilarAlbums = (similarAlbums as List<dynamic>)
+            .map((similarAlbum) => SimilarAlbumModel.fromJson(similarAlbum))
+            .toList();
 
-        if (mySimilarAlbums.isEmpty) {
-          emit(FetchSimilarAlbumsLoadedEmpty());
-        } else {
-          emit(FetchSimilarAlbumsLoaded(similarAlbum: mySimilarAlbums));
-        }
+        _emitLoaded(emit);
       } on ServerException catch (e) {
         emit(FetchSimilarAlbumsFailed(errorMessage: e.errorModel.errorMessage));
       }
     });
+
+    on<RenameSimilarAlbum>((event, emit) {
+      _allSimilarAlbums = _allSimilarAlbums
+          .map(
+            (album) => album.id == event.id
+                ? album.copyWith(name: event.newName)
+                : album,
+          )
+          .toList();
+
+      _emitLoaded(emit);
+    });
+  }
+
+  List<SimilarAlbumModel> _allSimilarAlbums = [];
+
+  void _emitLoaded(Emitter<FetchSimilarAlbumsState> emit) {
+    if (_allSimilarAlbums.isEmpty) {
+      emit(FetchSimilarAlbumsLoadedEmpty());
+    } else {
+      emit(FetchSimilarAlbumsLoaded(similarAlbum: _allSimilarAlbums));
+    }
   }
 }

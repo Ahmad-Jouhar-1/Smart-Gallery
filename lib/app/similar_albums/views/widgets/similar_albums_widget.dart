@@ -1,6 +1,8 @@
 import 'package:flutter/material.dart';
+import 'package:flutter_bloc/flutter_bloc.dart' hide Transition;
 import 'package:get/route_manager.dart';
 import 'package:smart_gallery/app/similar_album/views/screens/similar_album_screen.dart';
+import 'package:smart_gallery/app/similar_albums/controllers/fetch_similar_album/fetch_similar_albums_bloc.dart';
 import 'package:smart_gallery/app/similar_albums/models/similar_album_model.dart';
 import 'package:smart_gallery/app/similar_albums/views/widgets/similar_album_widget.dart';
 import 'package:smart_gallery/core/constants/app_dimensions.dart';
@@ -23,13 +25,18 @@ class SimilarAlbumsWidget extends StatelessWidget {
         childAspectRatio: 0.72,
       ),
       itemBuilder: (context, index) {
+        final album = similarAlbums[index];
+
         return SimilarAlbumWidget(
-          album: similarAlbums[index],
+          album: album,
           onTap:
               () => Get.to(
-                () => SimilarAlbumScreen(similarAlbum: similarAlbums[index]),
+                () => SimilarAlbumScreen(similarAlbum: album),
                 transition: Transition.circularReveal,
               ),
+          onRename: (newName) => context.read<FetchSimilarAlbumsBloc>().add(
+            RenameSimilarAlbum(id: album.id, newName: newName),
+          ),
         );
       },
     );
