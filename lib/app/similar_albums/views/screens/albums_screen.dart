@@ -31,7 +31,10 @@ class AlbumsScreen extends StatelessWidget {
             listener: (context, state) {
               if (state is RenameAlbumLoaded) {
                 context.read<FetchAlbumsBloc>().add(
-                  AlbumNameIsUpdated(id: state.id, newName: state.newName),
+                  AlbumNameIsUpdated(
+                    id: state.album.id,
+                    newName: state.album.name,
+                  ),
                 );
               } else if (state is RenameAlbumFailed) {
                 ScaffoldMessenger.of(context).showSnackBar(

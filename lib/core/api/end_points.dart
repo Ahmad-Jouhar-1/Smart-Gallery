@@ -27,6 +27,7 @@ class ApiKey {
   static String errorMessage = "message";
   static const String deviceIdentifier = 'device-identifier';
   static const String deviceIdentifierBody = 'device_identifier';
+  static const String newName = 'new_name';
   static const String detail = 'detail';
   static const String validationMessage = 'msg';
   static const String bestPhoto = 'best_photo';

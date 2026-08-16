@@ -12,10 +12,9 @@ final class RenameAlbumLoading extends RenameAlbumState {
 }
 
 final class RenameAlbumLoaded extends RenameAlbumState {
-  final int id;
-  final String newName;
+  final AlbumModel album;
 
-  RenameAlbumLoaded({required this.id, required this.newName});
+  RenameAlbumLoaded({required this.album});
 }
 
 final class RenameAlbumFailed extends RenameAlbumState {
