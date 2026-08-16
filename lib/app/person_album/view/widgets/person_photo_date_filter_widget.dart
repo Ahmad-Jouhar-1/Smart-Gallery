@@ -1,5 +1,5 @@
 import 'package:flutter/material.dart';
-import 'package:smart_gallery/app/people_albums/models/person_photo_date_filter.dart';
+import 'package:smart_gallery/app/person_album/models/person_photo_date_filter.dart';
 import 'package:smart_gallery/core/constants/app_colors.dart';
 import 'package:smart_gallery/core/constants/app_dimensions.dart';
 import 'package:smart_gallery/core/extentions/dimensions_extensions/percent_sized_extension.dart';

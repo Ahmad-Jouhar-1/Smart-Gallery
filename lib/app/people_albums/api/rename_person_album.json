@@ -1,0 +1,26 @@
+{
+  "endpoint": "PATCH /api/people/{person_id}/rename",
+  "description": "Renames a person album. Sent when the user confirms the rename dialog on the People Albums screen.",
+  "path_params": {
+    "person_id": "int — PersonAlbumModel.id of the album being renamed"
+  },
+  "request_body": {
+    "new_name": "string — trimmed, non-empty value entered by the user"
+  },
+  "request_example": {
+    "new_name": "Fatema"
+  },
+  "response_success_example": {
+    "success": true,
+    "person": {
+      "id": 1,
+      "name": "Fatema",
+      "image": "https://cdn.example.com/people/1/cover.jpg",
+      "count": 28
+    }
+  },
+  "response_error_example": {
+    "success": false,
+    "message": "Person not found"
+  }
+}

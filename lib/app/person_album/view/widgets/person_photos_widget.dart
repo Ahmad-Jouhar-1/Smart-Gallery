@@ -1,8 +1,8 @@
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 import 'package:smart_gallery/app/Image_evaluation/views/screens/image_evaluation_screen.dart';
-import 'package:smart_gallery/app/people_albums/models/person_photo_model.dart';
-import 'package:smart_gallery/app/people_albums/view/widgets/person_photo_widget.dart';
+import 'package:smart_gallery/app/person_album/models/person_photo_model.dart';
+import 'package:smart_gallery/app/person_album/view/widgets/person_photo_widget.dart';
 import 'package:smart_gallery/app/similar_album/models/similar_album_photo_model.dart';
 import 'package:smart_gallery/core/constants/app_dimensions.dart';
 
@@ -24,10 +24,6 @@ class PersonPhotosWidget extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    final bestPhotoId = personPhotos
-        .reduce((a, b) => b.rate > a.rate ? b : a)
-        .id;
-
     return GridView.builder(
       padding: EdgeInsets.symmetric(horizontal: AppDimensions.mp),
       shrinkWrap: true,
@@ -48,7 +44,6 @@ class PersonPhotosWidget extends StatelessWidget {
           rate: photo.rate,
           isSelecting: isSelecting,
           isSelected: isSelected,
-          isBest: photo.id == bestPhotoId,
           onLongPress: () => onStartSelecting(photo.id),
           onTap: () {
             if (isSelecting) {

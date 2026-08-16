@@ -1,8 +1,12 @@
 import 'package:flutter/material.dart';
-import 'package:smart_gallery/app/people_albums/models/person_photo_date_filter.dart';
-import 'package:smart_gallery/app/people_albums/models/person_photo_model.dart';
-import 'package:smart_gallery/app/people_albums/view/widgets/person_photo_date_filter_widget.dart';
-import 'package:smart_gallery/app/people_albums/view/widgets/person_photos_widget.dart';
+import 'package:get/get.dart';
+import 'package:smart_gallery/app/Image_evaluation/views/screens/image_evaluation_screen.dart';
+import 'package:smart_gallery/app/person_album/models/person_photo_date_filter.dart';
+import 'package:smart_gallery/app/person_album/models/person_photo_model.dart';
+import 'package:smart_gallery/app/person_album/view/widgets/person_best_photo_widget.dart';
+import 'package:smart_gallery/app/person_album/view/widgets/person_photo_date_filter_widget.dart';
+import 'package:smart_gallery/app/person_album/view/widgets/person_photos_widget.dart';
+import 'package:smart_gallery/app/similar_album/models/similar_album_photo_model.dart';
 import 'package:smart_gallery/core/constants/app_dimensions.dart';
 import 'package:smart_gallery/core/extentions/dimensions_extensions/percent_sized_extension.dart';
 import 'package:smart_gallery/core/widgets/subtitle_widget.dart';
@@ -10,6 +14,7 @@ import 'package:smart_gallery/core/widgets/subtitle_widget.dart';
 class PersonPhotosLoadedWidget extends StatelessWidget {
   const PersonPhotosLoadedWidget({
     super.key,
+    required this.personBestPhoto,
     required this.personPhotos,
     required this.selectedFilter,
     required this.onFilterSelected,
@@ -19,6 +24,7 @@ class PersonPhotosLoadedWidget extends StatelessWidget {
     required this.onToggleSelected,
   });
 
+  final PersonPhotoModel personBestPhoto;
   final List<PersonPhotoModel> personPhotos;
   final PersonPhotoDateFilter selectedFilter;
   final ValueChanged<PersonPhotoDateFilter> onFilterSelected;
@@ -32,6 +38,23 @@ class PersonPhotosLoadedWidget extends StatelessWidget {
     return ListView(
       padding: EdgeInsets.symmetric(vertical: AppDimensions.mp),
       children: [
+        PersonBestPhotoWidget(
+          personPhoto: personBestPhoto,
+          onTap: () => Get.to(
+            () => ImageEvaluationScreen(
+              similarAlbumPhoto: SimilarAlbumPhotoModel(
+                id: personBestPhoto.id,
+                image: personBestPhoto.image,
+                rate: personBestPhoto.rate,
+                isSelected: false,
+              ),
+            ),
+            transition: Transition.circularReveal,
+          ),
+        ),
+
+        SizedBox(height: AppDimensions.mp),
+
         PersonPhotoDateFilterWidget(
           selectedFilter: selectedFilter,
           onFilterSelected: onFilterSelected,

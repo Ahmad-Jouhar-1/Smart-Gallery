@@ -1,11 +1,11 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:get/get.dart';
-import 'package:smart_gallery/app/people_albums/controllers/fetch_person_photos/fetch_person_photos_bloc.dart';
+import 'package:smart_gallery/app/person_album/controllers/fetch_person_photos/fetch_person_photos_bloc.dart';
 import 'package:smart_gallery/app/people_albums/models/person_album_model.dart';
-import 'package:smart_gallery/app/people_albums/view/widgets/person_photos_failed_widget.dart';
-import 'package:smart_gallery/app/people_albums/view/widgets/person_photos_loaded_empty_widget.dart';
-import 'package:smart_gallery/app/people_albums/view/widgets/person_photos_loaded_widget.dart';
+import 'package:smart_gallery/app/person_album/view/widgets/person_photos_failed_widget.dart';
+import 'package:smart_gallery/app/person_album/view/widgets/person_photos_loaded_empty_widget.dart';
+import 'package:smart_gallery/app/person_album/view/widgets/person_photos_loaded_widget.dart';
 import 'package:smart_gallery/core/constants/app_colors.dart';
 import 'package:smart_gallery/core/controllers/selection/selection_bloc.dart';
 import 'package:smart_gallery/core/services/media_share_service.dart';
@@ -58,6 +58,7 @@ class PersonAlbumScreen extends StatelessWidget {
                       return BlocBuilder<SelectionBloc, SelectionState>(
                         builder: (context, selectionState) {
                           return PersonPhotosLoadedWidget(
+                            personBestPhoto: state.personBestPhoto,
                             personPhotos: state.personPhotos,
                             selectedFilter: state.filter,
                             onFilterSelected: (filter) => context

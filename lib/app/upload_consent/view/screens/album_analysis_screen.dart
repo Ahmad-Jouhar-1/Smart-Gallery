@@ -2,9 +2,9 @@ import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:get/get.dart';
 import 'package:percent_indicator/circular_percent_indicator.dart';
+import 'package:photo_manager/photo_manager.dart';
 import 'package:smart_gallery/app/main_navigation/view/screens/main_navigation_screen.dart';
-import 'package:smart_gallery/app/upload_consent/controllers/analyze_album/analyze_album_bloc.dart';
-import 'package:smart_gallery/app/upload_consent/models/studio_album_model.dart';
+import 'package:smart_gallery/app/upload_consent/controllers/bloc/analyze_album_bloc.dart';
 import 'package:smart_gallery/core/constants/app_colors.dart';
 import 'package:smart_gallery/core/constants/app_dimensions.dart';
 import 'package:smart_gallery/core/extentions/dimensions_extensions/percent_sized_extension.dart';
@@ -12,7 +12,7 @@ import 'package:smart_gallery/core/extentions/dimensions_extensions/percent_size
 class AlbumAnalysisScreen extends StatelessWidget {
   const AlbumAnalysisScreen({super.key, required this.album});
 
-  final StudioAlbumModel album;
+  final AssetPathEntity album;
 
   @override
   Widget build(BuildContext context) {

@@ -45,5 +45,7 @@
 	<true/>
 	<key>UIApplicationSupportsIndirectInputEvents</key>
 	<true/>
+	<key>NSPhotoLibraryUsageDescription</key>
+	<string>Smart Gallery needs access to your photo library to analyze and organize your albums.</string>
 </dict>
 </plist>

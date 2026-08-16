@@ -6,17 +6,27 @@ sealed class FetchPersonPhotosState {}
 final class FetchPersonPhotosLoading extends FetchPersonPhotosState {}
 
 final class FetchPersonPhotosLoaded extends FetchPersonPhotosState {
+  final PersonPhotoModel personBestPhoto;
   final List<PersonPhotoModel> personPhotos;
   final PersonPhotoDateFilter filter;
 
-  FetchPersonPhotosLoaded({required this.personPhotos, required this.filter});
+  FetchPersonPhotosLoaded({
+    required this.personBestPhoto,
+    required this.personPhotos,
+    required this.filter,
+  });
 }
 
 class FetchPersonPhotosLoadedEmpty extends FetchPersonPhotosState {
+  final PersonPhotoModel personBestPhoto;
   final PersonPhotoDateFilter filter;
   final bool hasAnyPhoto;
 
-  FetchPersonPhotosLoadedEmpty({required this.filter, required this.hasAnyPhoto});
+  FetchPersonPhotosLoadedEmpty({
+    required this.personBestPhoto,
+    required this.filter,
+    required this.hasAnyPhoto,
+  });
 }
 
 class FetchPersonPhotosFailed extends FetchPersonPhotosState {

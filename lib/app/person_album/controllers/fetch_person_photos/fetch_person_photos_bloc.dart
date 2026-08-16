@@ -1,8 +1,8 @@
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:meta/meta.dart';
-import 'package:smart_gallery/app/people_albums/models/person_photo_date_filter.dart';
-import 'package:smart_gallery/app/people_albums/models/person_photo_model.dart';
-import 'package:smart_gallery/app/people_albums/models/person_photos_json_model.dart';
+import 'package:smart_gallery/app/person_album/models/person_photo_date_filter.dart';
+import 'package:smart_gallery/app/person_album/models/person_photo_model.dart';
+import 'package:smart_gallery/app/person_album/models/person_photos_json_model.dart';
 import 'package:smart_gallery/core/errors/exceptions.dart';
 
 part 'fetch_person_photos_event.dart';
@@ -18,8 +18,14 @@ class FetchPersonPhotosBloc
         await Future.delayed(Duration(seconds: 1));
 
         final now = DateTime.now();
+        final personData = personPhotos[event.personId] as Map<String, dynamic>?;
         final rawPersonPhotos =
-            (personPhotos[event.personId] ?? []) as List<dynamic>;
+            (personData?["all_photos"] ?? []) as List<dynamic>;
+
+        _bestPhoto = PersonPhotoModel.fromJson(
+          personData?["best_photo"] as Map<String, dynamic>,
+          dateTime: now,
+        );
 
         _allPersonPhotos = rawPersonPhotos.asMap().entries.map((entry) {
           final offsetDays = _dateOffsetsInDays[entry.key % _dateOffsetsInDays.length];
@@ -42,6 +48,7 @@ class FetchPersonPhotosBloc
     });
   }
 
+  late PersonPhotoModel _bestPhoto;
   List<PersonPhotoModel> _allPersonPhotos = [];
   PersonPhotoDateFilter _currentFilter = PersonPhotoDateFilter.all;
 
@@ -56,13 +63,18 @@ class FetchPersonPhotosBloc
     if (filtered.isEmpty) {
       emit(
         FetchPersonPhotosLoadedEmpty(
+          personBestPhoto: _bestPhoto,
           filter: _currentFilter,
           hasAnyPhoto: _allPersonPhotos.isNotEmpty,
         ),
       );
     } else {
       emit(
-        FetchPersonPhotosLoaded(personPhotos: filtered, filter: _currentFilter),
+        FetchPersonPhotosLoaded(
+          personBestPhoto: _bestPhoto,
+          personPhotos: filtered,
+          filter: _currentFilter,
+        ),
       );
     }
   }
