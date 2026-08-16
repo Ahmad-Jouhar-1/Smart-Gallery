@@ -14,6 +14,7 @@ abstract class ApiConsumer {
     Map<String, dynamic> queryParameter,
     Options options,
     bool isFormData = false,
+    ProgressCallback? onSendProgress,
   });
 
   Future<dynamic> put(

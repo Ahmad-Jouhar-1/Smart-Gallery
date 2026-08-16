@@ -1,15 +1,15 @@
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
-import 'package:smart_gallery/app/Image_evaluation/views/screens/image_evaluation_screen.dart';
 import 'package:smart_gallery/app/person_album/models/person_photo_date_filter.dart';
 import 'package:smart_gallery/app/person_album/models/person_photo_model.dart';
 import 'package:smart_gallery/app/person_album/view/widgets/person_best_photo_widget.dart';
 import 'package:smart_gallery/app/person_album/view/widgets/person_photo_date_filter_widget.dart';
 import 'package:smart_gallery/app/person_album/view/widgets/person_photos_widget.dart';
-import 'package:smart_gallery/app/similar_album/models/similar_album_photo_model.dart';
 import 'package:smart_gallery/core/constants/app_dimensions.dart';
 import 'package:smart_gallery/core/extentions/dimensions_extensions/percent_sized_extension.dart';
 import 'package:smart_gallery/core/widgets/subtitle_widget.dart';
+import 'package:smart_gallery/app/image_evaluation/views/screens/report_screen.dart';
+import 'package:smart_gallery/app/similar_album/models/photo_model.dart';
 
 class PersonPhotosLoadedWidget extends StatelessWidget {
   const PersonPhotosLoadedWidget({
@@ -41,8 +41,8 @@ class PersonPhotosLoadedWidget extends StatelessWidget {
         PersonBestPhotoWidget(
           personPhoto: personBestPhoto,
           onTap: () => Get.to(
-            () => ImageEvaluationScreen(
-              similarAlbumPhoto: SimilarAlbumPhotoModel(
+            () => ReportScreen(
+              photo: PhotoModel(
                 id: personBestPhoto.id,
                 image: personBestPhoto.image,
                 rate: personBestPhoto.rate,

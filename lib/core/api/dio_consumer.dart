@@ -50,6 +50,7 @@ class DioConsumer extends ApiConsumer {
     Map<String, dynamic>? queryParameter,
     Options? options,
     bool isFormData = false,
+    ProgressCallback? onSendProgress,
   }) async {
     try {
       final response = await dio.post(
@@ -57,6 +58,7 @@ class DioConsumer extends ApiConsumer {
         data: isFormData ? FormData.fromMap(data) : data,
         queryParameters: queryParameter,
         options: options,
+        onSendProgress: onSendProgress,
       );
       return response.data;
     } on DioException catch (e) {

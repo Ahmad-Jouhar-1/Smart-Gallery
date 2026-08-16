@@ -1,10 +1,10 @@
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
-import 'package:smart_gallery/app/Image_evaluation/views/screens/image_evaluation_screen.dart';
 import 'package:smart_gallery/app/person_album/models/person_photo_model.dart';
 import 'package:smart_gallery/app/person_album/view/widgets/person_photo_widget.dart';
-import 'package:smart_gallery/app/similar_album/models/similar_album_photo_model.dart';
 import 'package:smart_gallery/core/constants/app_dimensions.dart';
+import 'package:smart_gallery/app/similar_album/models/photo_model.dart';
+import 'package:smart_gallery/app/image_evaluation/views/screens/report_screen.dart';
 
 class PersonPhotosWidget extends StatelessWidget {
   const PersonPhotosWidget({
@@ -52,8 +52,8 @@ class PersonPhotosWidget extends StatelessWidget {
             }
 
             Get.to(
-              () => ImageEvaluationScreen(
-                similarAlbumPhoto: SimilarAlbumPhotoModel(
+              () => ReportScreen(
+                photo: PhotoModel(
                   id: photo.id,
                   image: photo.image,
                   rate: photo.rate,

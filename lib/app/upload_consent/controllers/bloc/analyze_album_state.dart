@@ -10,3 +10,9 @@ final class AnalyzeAlbumInProgress extends AnalyzeAlbumState {
 }
 
 final class AnalyzeAlbumCompleted extends AnalyzeAlbumState {}
+
+final class AnalyzeAlbumFailed extends AnalyzeAlbumState {
+  final String errorMessage;
+
+  AnalyzeAlbumFailed({required this.errorMessage});
+}

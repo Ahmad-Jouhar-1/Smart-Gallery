@@ -4,7 +4,7 @@ part of 'analyze_album_bloc.dart';
 sealed class AnalyzeAlbumEvent {}
 
 class StartAnalyzingAlbum extends AnalyzeAlbumEvent {
-  final String albumId;
+  final AssetPathEntity album;
 
-  StartAnalyzingAlbum({required this.albumId});
+  StartAnalyzingAlbum({required this.album});
 }

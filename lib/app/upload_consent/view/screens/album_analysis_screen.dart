@@ -18,7 +18,7 @@ class AlbumAnalysisScreen extends StatelessWidget {
   Widget build(BuildContext context) {
     return BlocProvider(
       create: (context) =>
-          AnalyzeAlbumBloc()..add(StartAnalyzingAlbum(albumId: album.id)),
+          AnalyzeAlbumBloc()..add(StartAnalyzingAlbum(album: album)),
       child: Scaffold(
         backgroundColor: AppColors.primaryBackgroundColor,
         body: SafeArea(
@@ -29,6 +29,15 @@ class AlbumAnalysisScreen extends StatelessWidget {
               }
             },
             builder: (context, state) {
+              if (state is AnalyzeAlbumFailed) {
+                return _AnalyzeAlbumFailedWidget(
+                  errorMessage: state.errorMessage,
+                  onTryAgain: () => context.read<AnalyzeAlbumBloc>().add(
+                    StartAnalyzingAlbum(album: album),
+                  ),
+                );
+              }
+
               final progress = state is AnalyzeAlbumInProgress
                   ? state.progress
                   : 100;
@@ -86,6 +95,83 @@ class AlbumAnalysisScreen extends StatelessWidget {
             },
           ),
         ),
+      ),
+    );
+  }
+}
+
+class _AnalyzeAlbumFailedWidget extends StatelessWidget {
+  const _AnalyzeAlbumFailedWidget({
+    required this.errorMessage,
+    required this.onTryAgain,
+  });
+
+  final String errorMessage;
+  final VoidCallback onTryAgain;
+
+  @override
+  Widget build(BuildContext context) {
+    return Padding(
+      padding: EdgeInsets.all(AppDimensions.xlp),
+      child: Column(
+        mainAxisAlignment: MainAxisAlignment.center,
+        children: [
+          Icon(
+            Icons.error_outline_rounded,
+            color: AppColors.accentTextColor,
+            size: AppDimensions.lis,
+          ),
+
+          SizedBox(height: AppDimensions.mp),
+
+          Text(
+            "Upload Failed",
+            textAlign: TextAlign.center,
+            style: TextStyle(
+              color: AppColors.primaryTextColor,
+              fontSize: AppDimensions.lfs,
+              fontWeight: FontWeight.bold,
+            ),
+          ),
+
+          SizedBox(height: AppDimensions.sm),
+
+          Text(
+            errorMessage,
+            textAlign: TextAlign.center,
+            style: TextStyle(
+              color: AppColors.accentTextColor,
+              fontSize: AppDimensions.mfs,
+              fontWeight: FontWeight.w500,
+            ),
+          ),
+
+          SizedBox(height: AppDimensions.lp),
+
+          GestureDetector(
+            onTap: onTryAgain,
+            child: Container(
+              padding: EdgeInsets.symmetric(
+                horizontal: AppDimensions.lp,
+                vertical: AppDimensions.sp,
+              ),
+              decoration: BoxDecoration(
+                gradient: LinearGradient(
+                  colors: [AppColors.primaryColor, AppColors.secondaryColor],
+                ),
+                borderRadius: BorderRadius.circular(AppDimensions.mbr),
+              ),
+              child: Text(
+                "Try Again",
+                style: TextStyle(
+                  color: AppColors.foregroundColor,
+                  fontSize: AppDimensions.mfs,
+                  fontWeight: FontWeight.bold,
+                ),
+              ),
+            ),
+          ),
+        ],
       ),
     );
   }
