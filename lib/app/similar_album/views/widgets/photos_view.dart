@@ -16,7 +16,7 @@ class PhotosView extends StatelessWidget {
     required this.selectedIds,
     required this.onStartSelecting,
     required this.onToggleSelected,
-    required this.onDeleteAll,
+    required this.onSelectSuggested,
   });
 
   final ClusterModel cluster;
@@ -24,11 +24,11 @@ class PhotosView extends StatelessWidget {
   final Set<int> selectedIds;
   final ValueChanged<int> onStartSelecting;
   final ValueChanged<int> onToggleSelected;
-  final VoidCallback onDeleteAll;
+  final VoidCallback onSelectSuggested;
 
   @override
   Widget build(BuildContext context) {
-    final hasDeletablePhotos = cluster.photos.any(
+    final hasPhotosToReview = cluster.photos.any(
       (photo) => photo.id != cluster.bestPhoto.id,
     );
 
@@ -52,9 +52,9 @@ class PhotosView extends StatelessWidget {
           onStartSelecting: onStartSelecting,
           onToggleSelected: onToggleSelected,
         ),
-        if (hasDeletablePhotos) ...[
+        if (hasPhotosToReview && !isSelecting) ...[
           SizedBox(height: AppDimensions.mp),
-          _DeleteAllButton(onTap: onDeleteAll),
+          _SuggestedButton(onTap: onSelectSuggested),
         ],
         if (isSelecting) SizedBox(height: 12.0.wp),
       ],
@@ -62,8 +62,8 @@ class PhotosView extends StatelessWidget {
   }
 }
 
-class _DeleteAllButton extends StatelessWidget {
-  const _DeleteAllButton({required this.onTap});
+class _SuggestedButton extends StatelessWidget {
+  const _SuggestedButton({required this.onTap});
 
   final VoidCallback onTap;
 

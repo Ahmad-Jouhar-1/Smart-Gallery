@@ -43,6 +43,7 @@ dependencies:
   percent_indicator: ^4.2.5
   share_plus: ^10.1.4
   path_provider: ^2.1.5
+  photo_manager: ^3.6.4
   shared_preferences: ^2.5.3
   get_it: ^8.0.3
   uuid: ^4.5.1
@@ -71,22 +72,6 @@ flutter:
 
   # To add assets to your application, add an assets section, like this:
   assets:
-    - assets/images/album1/
-    - assets/images/album2/
-    - assets/images/album3/
-    - assets/images/album4/
-    - assets/images/album5/
-    - assets/images/album6/
-    - assets/images/album7/
-    - assets/images/album8/
-    - assets/images/album9/
-    - assets/images/album10/
-    - assets/images/album11/
-    - assets/images/album12/
-    - assets/images/person1/
-    - assets/images/person2/
-    - assets/images/person3/
-    - assets/images/person4/
     - assets/images/
 
   # An image asset can refer to one or more resolution-specific "variants", see

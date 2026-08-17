@@ -1,14 +1,15 @@
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
-import 'package:smart_gallery/app/upload_consent/models/studio_album_model.dart';
+import 'package:photo_manager/photo_manager.dart';
 import 'package:smart_gallery/app/upload_consent/view/screens/album_analysis_screen.dart';
 import 'package:smart_gallery/app/upload_consent/view/widgets/studio_album_widget.dart';
+import 'package:smart_gallery/core/constants/app_colors.dart';
 import 'package:smart_gallery/core/constants/app_dimensions.dart';
 
 class StudioAlbumsWidget extends StatelessWidget {
   const StudioAlbumsWidget({super.key, required this.studioAlbums});
 
-  final List<StudioAlbumModel> studioAlbums;
+  final List<AssetPathEntity> studioAlbums;
 
   @override
   Widget build(BuildContext context) {
@@ -28,12 +29,58 @@ class StudioAlbumsWidget extends StatelessWidget {
 
         return StudioAlbumWidget(
           album: album,
-          onTap: () => Get.to(
-            () => AlbumAnalysisScreen(album: album),
-            transition: Transition.circularReveal,
-          ),
+          onTap: () => _confirmAnalysis(context, album),
         );
       },
+    );
+  }
+
+  void _confirmAnalysis(BuildContext context, AssetPathEntity album) {
+    showDialog(
+      context: context,
+      builder: (dialogContext) => AlertDialog(
+        backgroundColor: AppColors.accentBackgroundColor,
+        title: Text(
+          "Analyze Album",
+          style: TextStyle(
+            color: AppColors.primaryTextColor,
+            fontSize: AppDimensions.lfs,
+            fontWeight: FontWeight.bold,
+          ),
+        ),
+        content: Text(
+          'Analysis for "${album.name}" will start now. Do you want to continue?',
+          style: TextStyle(
+            color: AppColors.accentTextColor,
+            fontSize: AppDimensions.mfs,
+          ),
+        ),
+        actions: [
+          TextButton(
+            onPressed: () => Navigator.of(dialogContext).pop(),
+            child: Text(
+              "Cancel",
+              style: TextStyle(color: AppColors.accentTextColor),
+            ),
+          ),
+          TextButton(
+            onPressed: () {
+              Navigator.of(dialogContext).pop();
+              Get.to(
+                () => AlbumAnalysisScreen(album: album),
+                transition: Transition.circularReveal,
+              );
+            },
+            child: Text(
+              "Agree",
+              style: TextStyle(
+                color: AppColors.primaryColor,
+                fontWeight: FontWeight.bold,
+              ),
+            ),
+          ),
+        ],
+      ),
     );
   }
 }

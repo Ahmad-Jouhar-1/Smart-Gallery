@@ -5,6 +5,8 @@ sealed class DeviceIdentifierState {}
 
 final class DeviceIdentifierInitial extends DeviceIdentifierState {}
 
+final class DeviceIdentifierLoading extends DeviceIdentifierState {}
+
 final class DeviceIdentifierInitialized extends DeviceIdentifierState {
   final String deviceIdentifier;
 

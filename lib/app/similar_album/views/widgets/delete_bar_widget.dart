@@ -6,11 +6,13 @@ class DeleteBarWidget extends StatelessWidget {
   const DeleteBarWidget({
     super.key,
     required this.selectedCount,
+    required this.isLoading,
     required this.onCancel,
     required this.onDelete,
   });
 
   final int selectedCount;
+  final bool isLoading;
   final VoidCallback onCancel;
   final VoidCallback onDelete;
 
@@ -38,7 +40,7 @@ class DeleteBarWidget extends StatelessWidget {
         child: Row(
           children: [
             GestureDetector(
-              onTap: onCancel,
+              onTap: isLoading ? null : onCancel,
               child: Icon(Icons.close, color: AppColors.accentTextColor),
             ),
             SizedBox(width: AppDimensions.mp),
@@ -52,7 +54,7 @@ class DeleteBarWidget extends StatelessWidget {
             ),
             Spacer(),
             GestureDetector(
-              onTap: selectedCount == 0
+              onTap: selectedCount == 0 || isLoading
                   ? null
                   : () => _confirmDelete(context),
               child: Container(
@@ -68,19 +70,30 @@ class DeleteBarWidget extends StatelessWidget {
                   mainAxisSize: MainAxisSize.min,
                   spacing: AppDimensions.sm / 2,
                   children: [
-                    Icon(
-                      Icons.delete_outline,
-                      color: AppColors.foregroundColor,
-                      size: AppDimensions.mfs,
-                    ),
-                    Text(
-                      "Delete",
-                      style: TextStyle(
+                    if (isLoading)
+                      SizedBox(
+                        width: AppDimensions.mfs,
+                        height: AppDimensions.mfs,
+                        child: CircularProgressIndicator(
+                          strokeWidth: 2,
+                          color: AppColors.foregroundColor,
+                        ),
+                      )
+                    else ...[
+                      Icon(
+                        Icons.delete_outline,
                         color: AppColors.foregroundColor,
-                        fontSize: AppDimensions.mfs,
-                        fontWeight: FontWeight.bold,
+                        size: AppDimensions.mfs,
                       ),
-                    ),
+                      Text(
+                        "Delete",
+                        style: TextStyle(
+                          color: AppColors.foregroundColor,
+                          fontSize: AppDimensions.mfs,
+                          fontWeight: FontWeight.bold,
+                        ),
+                      ),
+                    ],
                   ],
                 ),
               ),

@@ -1,5 +1,5 @@
 import 'package:flutter/material.dart';
-import 'package:smart_gallery/app/people_albums/view/screens/people_albums_screen.dart';
+import 'package:smart_gallery/app/people_albums/views/screens/people_screen.dart';
 import 'package:smart_gallery/app/similar_albums/views/screens/albums_screen.dart';
 import 'package:smart_gallery/core/constants/app_colors.dart';
 import 'package:smart_gallery/core/constants/app_dimensions.dart';
@@ -15,7 +15,7 @@ class _MainNavigationScreenState extends State<MainNavigationScreen> {
   int _currentIndex = 0;
 
   final List<Widget> _screens = const [
-    PeopleAlbumsScreen(),
+    PeopleScreen(),
     AlbumsScreen(),
   ];
 

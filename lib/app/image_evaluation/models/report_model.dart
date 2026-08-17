@@ -32,15 +32,15 @@ class ReportModel {
   factory ReportModel.fromJson(Map<String, dynamic> jsonData) {
     return ReportModel(
       id: jsonData[ApiKey.id],
-      finalScore: jsonData[ApiKey.finalScore],
+      finalScore: (jsonData[ApiKey.finalScore] as num).toInt(),
       finalLevel: jsonData[ApiKey.finalLevel],
-      lightingScore: jsonData[ApiKey.lightingScore],
+      lightingScore: (jsonData[ApiKey.lightingScore] as num).toInt(),
       lightingLevel: jsonData[ApiKey.lightingLevel],
-      clarityScore: jsonData[ApiKey.blurScore],
+      clarityScore: (jsonData[ApiKey.blurScore] as num).toInt(),
       clarityLevel: jsonData[ApiKey.blurLevel],
-      bodyPositionScore: jsonData[ApiKey.bodyPositionScore],
+      bodyPositionScore: (jsonData[ApiKey.bodyPositionScore] as num).toInt(),
       bodyPositionLevel: jsonData[ApiKey.bodyPositionLevel],
-      eyeOpenScore: jsonData[ApiKey.eyeOpenScore],
+      eyeOpenScore: (jsonData[ApiKey.eyeOpenScore] as num).toInt(),
       eyeOpenLevel: jsonData[ApiKey.eyeOpenLevel],
       finalReason: jsonData[ApiKey.finalReason],
     );

@@ -15,15 +15,16 @@ part 'device_identifier_state.dart';
 class DeviceIdentifierBloc
     extends Bloc<DeviceIdentifierEvent, DeviceIdentifierState> {
   DeviceIdentifierBloc() : super(DeviceIdentifierInitial()) {
-    DioConsumer api = DioConsumer(dio: Dio());
-
     on<DeviceIdentifierIsInitialized>((event, emit) async {
+      emit(DeviceIdentifierLoading());
+
       try {
         String? deviceIdentifier =
             await SharedPreferencesService.getDeviceIdentifier();
 
         if (deviceIdentifier == null) {
           deviceIdentifier = const Uuid().v4();
+          DioConsumer api = DioConsumer(dio: Dio());
 
           await api.post(
             EndPoints.registerDevice,

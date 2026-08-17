@@ -2,13 +2,12 @@ import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:get/get.dart';
 import 'package:smart_gallery/app/image_evaluation/controllers/report_bloc/report_bloc.dart';
-import 'package:smart_gallery/app/image_evaluation/views/widgets/report_failed_widget.dart';
 import 'package:smart_gallery/app/image_evaluation/views/widgets/report_view.dart';
-import 'package:smart_gallery/app/similar_album/models/photo_model.dart';
 import 'package:smart_gallery/core/constants/app_colors.dart';
 import 'package:smart_gallery/core/widgets/app_bar_widget.dart';
 import 'package:smart_gallery/core/widgets/loading_widget.dart';
-
+import 'package:smart_gallery/app/similar_album/models/photo_model.dart';
+import 'package:smart_gallery/app/image_evaluation/views/widgets/report_failed_widget.dart';
 class ReportScreen extends StatelessWidget {
   const ReportScreen({super.key, required this.photo});
 

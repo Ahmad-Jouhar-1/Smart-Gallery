@@ -8,9 +8,3 @@ final class FetchCluster extends ClusterEvent {
 
   FetchCluster({required this.clusterId});
 }
-
-final class DeletePhotos extends ClusterEvent {
-  final Set<int> ids;
-
-  DeletePhotos({required this.ids});
-}

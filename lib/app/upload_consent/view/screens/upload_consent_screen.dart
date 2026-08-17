@@ -21,7 +21,6 @@ class UploadConsentScreen extends StatelessWidget {
 
               _CloudIcon(),
 
-              SizedBox(height: AppDimensions.lp),
 
               Text(
                 "Analyze Your Gallery",

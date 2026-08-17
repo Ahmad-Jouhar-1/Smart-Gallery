@@ -21,11 +21,4 @@ class ClusterModel {
           .toList(),
     );
   }
-
-  ClusterModel copyWith({PhotoModel? bestPhoto, List<PhotoModel>? photos}) {
-    return ClusterModel(
-      bestPhoto: bestPhoto ?? this.bestPhoto,
-      photos: photos ?? this.photos,
-    );
-  }
 }

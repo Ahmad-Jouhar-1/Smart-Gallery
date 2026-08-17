@@ -17,7 +17,7 @@ class PhotoModel {
     return PhotoModel(
       id: jsonData[ApiKey.id],
       image: jsonData[ApiKey.image],
-      rate: jsonData[ApiKey.rate],
+      rate: (jsonData[ApiKey.rate] as num).toInt(),
       isSelected: jsonData[ApiKey.isSelected],
     );
   }
